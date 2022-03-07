@@ -44,6 +44,21 @@ return static function (RouteBuilder $routes) {
      */
     $routes->setRouteClass(DashedRoute::class);
 
+    $routes->prefix('Admin', function(RouteBuilder $adminRoutes){
+
+        $adminRoutes->connect('/', ['controller' => 'Admin', 'action' => 'index']);
+        $adminRoutes->scope('/record', function(RouteBuilder $recordRoutes){
+            $recordRoutes->connect('/edit/{id}', ['controller' => 'Admin', 'action' => 'edit'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
+            $recordRoutes->connect('/delete/{id}', ['controller' => 'Admin', 'action' => 'delete'])
+            ->setPatterns(['id' => '\d+'])
+            ->setPass(['id']);
+            $recordRoutes->connect('/insert', ['controller' => 'Admin', 'action' => 'insert']);
+        });
+      
+    });
+
     $routes->scope('/', function (RouteBuilder $builder) {
         /*
          * Here, we are connecting '/' (base path) to a controller called 'Pages',
