@@ -44,37 +44,14 @@ return static function (RouteBuilder $routes) {
      */
     $routes->setRouteClass(DashedRoute::class);
 
-    $routes->prefix('Admin', function(RouteBuilder $adminRoutes){
-
-        $adminRoutes->connect('/', ['controller' => 'Admin', 'action' => 'index']);
-
-        $adminRoutes->scope('/record', function(RouteBuilder $recordRoutes){
-
-            $recordRoutes->connect('/edit/{id}', ['controller' => 'Admin', 'action' => 'edit'])
-            ->setPatterns(['id' => '\d+'])
-            ->setPass(['id']);
-
-            $recordRoutes->connect('/delete/{id}', ['controller' => 'Admin', 'action' => 'delete'])
-            ->setPatterns(['id' => '\d+'])
-            ->setPass(['id']);
-            
-            $recordRoutes->connect('/insert', ['controller' => 'Admin', 'action' => 'insert']);
-        });
-      
-    });
-
     $routes->scope('/', function (RouteBuilder $builder) {
         /*
          * Here, we are connecting '/' (base path) to a controller called 'Pages',
          * its action called 'display', and we pass a param to select the view file
          * to use (in this case, templates/Pages/home.php)...
          */
-        $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+        $builder->connect('/', ['controller' => 'Main', 'action' => 'index']);
 
-        /*
-         * ...and connect the rest of 'Pages' controller's URLs.
-         */
-        $builder->connect('/pages/*', 'Pages::display');
 
         /*
          * Connect catchall routes for all controllers.

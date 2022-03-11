@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 namespace App\View;
 
+use Cake\Event\Event;
 use Cake\View\View;
 
 /**
@@ -37,5 +38,11 @@ class AppView extends View
      */
     public function initialize(): void
     {
+        
+        $this->Html->css('https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',['block' => true]);
+        $this->Html->css('style',['block' => true]);
+        $this->Html->script('https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js',['block' => true]);
     }
+
+    
 }

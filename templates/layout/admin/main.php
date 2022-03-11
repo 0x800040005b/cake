@@ -11,8 +11,16 @@
     <?=$this->fetch('css')?>
 </head>
 <body>
-    
-<?=$this->fetch('content')?>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col">
+            <?=$this->fetch('content')?>
+
+            </div>
+        </div>
+</div>
+    <!-- /.container -->
+
 
 
 <?=$this->fetch('script')?>

@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Event\Event;
 
 /**
  * Application Controller
@@ -37,10 +38,13 @@ class AppController extends Controller
      *
      * @return void
      */
+
     public function initialize(): void
     {
         parent::initialize();
+        $this->set('title','from Controller');
 
+        $this->viewBuilder()->setClassName('Admin');
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
@@ -50,4 +54,5 @@ class AppController extends Controller
          */
         //$this->loadComponent('FormProtection');
     }
+
 }

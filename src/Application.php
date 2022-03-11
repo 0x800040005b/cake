@@ -28,6 +28,12 @@ use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
+
+
+
+
+
+
 /**
  * Application setup class.
  *
@@ -36,6 +42,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  */
 class Application extends BaseApplication
 {
+
     /**
      * Load all the application configuration and bootstrap logic.
      *
@@ -133,4 +140,5 @@ class Application extends BaseApplication
 
         // Load more plugins here
     }
+
 }

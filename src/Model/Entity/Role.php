@@ -32,4 +32,13 @@ class Role extends Entity
         'modified' => true,
         'users' => true,
     ];
+
+    protected function _getName($name){
+
+        return $name;
+    }
+    protected function _getUsers($users){
+
+        return $users;
+    }
 }

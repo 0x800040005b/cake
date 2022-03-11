@@ -1,0 +1,12 @@
+.circle{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.active{
+    background-color: #2d6b30;
+}
+.inactive {
+    background-color: #9c9c9c;
+}

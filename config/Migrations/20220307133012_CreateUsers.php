@@ -19,11 +19,13 @@ class CreateUsers extends AbstractMigration
         $table->addColumn('first_name','string',[
 
             "limit" => 100,
+            'null' => false,
         ]);
 
        $table ->addColumn('last_name', 'string',[
 
             "limit" => 100,
+            'null' => false,
         ]);
 
         $table->addTimestamps('created', 'modified');
