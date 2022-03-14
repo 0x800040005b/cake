@@ -53,24 +53,12 @@
                 <div class="table-responsive">
                     <table>
                         <tr>
-                            <th><?= __('Id') ?></th>
                             <th><?= __('Name') ?></th>
-                            <th><?= __('Created') ?></th>
-                            <th><?= __('Modified') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
+
                         </tr>
                         <?php foreach ($user->roles as $roles) : ?>
                         <tr>
-                            <td><?= h($roles->id) ?></td>
                             <td><?= h($roles->name) ?></td>
-                            <td><?= h($roles->created) ?></td>
-                            <td><?= h($roles->modified) ?></td>
-                            <td class="actions">
-                                <?= $this->Html->link(__('View'), ['controller' => 'Roles', 'action' => 'view', $roles->id]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => 'Roles', 'action' => 'edit', $roles->id]) ?>
-                                <?= $this->Form->postLink(__('Delete'), ['controller' => 'Roles', 'action' => 'delete', $roles->id], ['confirm' => __('Are you sure you want to delete # {0}?', $roles->id)]) ?>
-                            </td>
-                        </tr>
                         <?php endforeach; ?>
                     </table>
                 </div>

@@ -3,15 +3,33 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  */
-?>
+
+ 
+ ?>
+ 
+
+
+ 
+
 <div class="users index content">
-    <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <div class="row">
+        <div class="col">
+            <div class="content d-flex mb-3">
+                <div class="content__data"><?=$loggedUser->first_name?></div>
+                <div class="content__data"><?=$loggedUser->last_name?></div>
+            </div>
+        </div>
+    </div>
+    <?= $this->Html->link(__('Add User'), ['controller' => 'Users','action' => 'add'], ['class' => 'btn btn-success']) ?>
+    <?= $this->Html->link(__('Logout'), ['controller' => 'Main','action' => 'logout'], ['class' => 'btn btn-danger']) ?>
+    <?php debug($loggedUser);?>
     <h3><?= __('Users') ?></h3>
+
     <div class="table-responsive">
-        <table>
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
+                    <th><?= $this->Paginator->sort('id',null) ?></th>
                     <th><?= $this->Paginator->sort('first_name') ?></th>
                     <th><?= $this->Paginator->sort('last_name') ?></th>
                     <th><?= $this->Paginator->sort('is_active') ?></th>
@@ -43,11 +61,8 @@
     </div>
     <div class="paginator">
         <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
             <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
+
         </ul>
         <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
     </div>

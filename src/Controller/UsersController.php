@@ -12,9 +12,17 @@ namespace App\Controller;
 class UsersController extends AppController
 {
 
+    private $loggedUser = null;
+
     public function initialize(): void
     {
         parent::initialize();
+
+        $this->loggedUser = $this->fetchTable('Users')->get($this->request->getAttribute('identity')->id,[
+            'contain' => ['Roles'],
+        ]);
+        $this->set('loggedUser', $this->loggedUser);
+     
     }
 
 
@@ -25,9 +33,14 @@ class UsersController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+    
+
+        
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
+
     }
 
     /**
@@ -39,9 +52,15 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
+       
+        $this->Authorization->skipAuthorization();
+
         $user = $this->Users->get($id, [
             'contain' => ['Roles'],
+            
         ]);
+        
+
 
         $this->set(compact('user'));
     }
@@ -53,8 +72,12 @@ class UsersController extends AppController
      */
     public function add()
     {
+        $this->Authorization->authorize($this->loggedUser);
         $user = $this->Users->newEmptyEntity();
+        
+
         if ($this->request->is('post')) {
+
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
@@ -76,9 +99,13 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
+
         $user = $this->Users->get($id, [
             'contain' => ['Roles'],
         ]);
+        $this->Authorization->authorize($this->loggedUser);
+
+       
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
@@ -101,6 +128,7 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
+
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
