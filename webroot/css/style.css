@@ -13,3 +13,9 @@
 .content__data{
     margin-right: 30px;
 }
+.message-error{
+    color:#d11d1d;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}

@@ -51,6 +51,7 @@ return static function (RouteBuilder $routes) {
          * to use (in this case, templates/Pages/home.php)...
          */
         $builder->connect('/', ['controller' => 'Main', 'action' => 'index']);
+        $builder->connect('/main/register', ['controller' => 'Main', 'action' => 'register']);
 
 
         /*

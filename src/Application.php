@@ -204,7 +204,6 @@ public function getAuthenticationService(ServerRequestInterface $request): Authe
 
     return $authenticationService;
 }
-
 /**
  * 
  * Authorization

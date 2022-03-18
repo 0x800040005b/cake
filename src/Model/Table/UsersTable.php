@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -67,28 +68,53 @@ class UsersTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
+            ->setStopOnFailure(true)
             ->scalar('first_name')
             ->maxLength('first_name', 100)
             ->requirePresence('first_name', 'create')
+            ->add('first_name', 'custom', [
+                'rule' => function ($value, $context) {
+                    $isMatched = preg_match_all('/^[a-zA-Z]+$/', $value);
+                    if ($isMatched)
+                        return true;
+                    return false;
+                },
+                'message' => 'field must be without numbers',
+            ])
             ->notEmptyString('first_name');
 
+
         $validator
+            ->setStopOnFailure(true)
             ->scalar('last_name')
             ->maxLength('last_name', 100)
             ->requirePresence('last_name', 'create')
+            ->add('last_name', 'custom', [
+                'rule' => function ($value, $context) {
+                    $isMatched = preg_match_all('/^[a-zA-Z]+$/', $value);
+                    if ($isMatched)
+                        return true;
+                    return false;
+                },
+                'message' => 'field must be without numbers',
+            ])
             ->notEmptyString('last_name');
+
+
 
         $validator
             ->boolean('is_active')
             ->notEmptyString('is_active');
 
         $validator
+            ->setStopOnFailure(true)
             ->email('email')
             ->requirePresence('email', 'create')
             ->notEmptyString('email')
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table','message' => 'email must be unique']);
 
         $validator
+            ->setStopOnFailure(true)
             ->scalar('password')
             ->maxLength('password', 255)
             ->requirePresence('password', 'create')
@@ -110,4 +136,18 @@ class UsersTable extends Table
 
         return $rules;
     }
+    
+    public function findByEmail(Query $query, array $options){
+
+       return $query->where(['email = ' => $options['email']]);
+
+    }
+
+    public function findByPassword(Query $query, array $options){
+
+        
+        return $query->where(['password = ' => $options['password']]);
+        
+     }
+
 }

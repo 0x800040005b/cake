@@ -50,7 +50,6 @@ class AppController extends Controller
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
 
-        $this->Authentication->addUnauthenticatedActions(['index','login','view']);
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.

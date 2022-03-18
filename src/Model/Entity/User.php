@@ -70,6 +70,21 @@ class User extends Entity
 
         return $roles;
     }
+    protected function _getPassword($password){
+
+        return $password;
+    }
+    public function is_admin(){
+        return strcasecmp($this->getRole(), 'Admin') === 0;
+    }
+    public function is_user(){
+        return strcasecmp($this->getRole(), 'User') === 0;
+    }
+
+    public function getRole(){
+        return $this->roles[0]->name;
+    }
+ 
 
   /**
    * 
@@ -91,7 +106,7 @@ class User extends Entity
     return $last_name;
 }
 
-protected function _setIsActive($is_active){
+protected function _setActive($is_active){
 
     $this->$is_active = $is_active;
     
@@ -106,7 +121,7 @@ protected function _setPassword($password){
 
     $this->password = password_hash($password,PASSWORD_BCRYPT);
 
-    return password_hash($password,PASSWORD_BCRYPT);
+    return $this->password;
 }
 
 }

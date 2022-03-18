@@ -5,15 +5,19 @@
  */
 ?>
 <div class="row">
+    
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Users'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+            <?php if($loggedUser->is_admin()): ?>
+            <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'side-nav-item btn btn-outline-success']) ?>
+            <?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id], ['class' => 'side-nav-item btn btn-outline-warning']) ?>
+            <?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'side-nav-item btn btn-outline-danger']) ?>
+            <?php endif; ?>
+            <?= $this->Html->link(__('List Users'), ['action' => 'index'], ['class' => 'side-nav-item btn btn-outline-secondary']) ?>
         </div>
     </aside>
+ 
     <div class="column-responsive column-80">
         <div class="users view content">
             <h3><?= h($user->id) ?></h3>

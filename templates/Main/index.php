@@ -1,19 +1,17 @@
 <?php
 
-use Cake\Routing\Router;
+
 ?>
 
 <div class="row">
 
-  <div class="col-6 d-flex"><?=$this->Html->link(
-    'Sign in',
-  Router::url([
-    'prefix' => false,
-    'plugin' => false,
-    'controller' => 'Main',
-    'action' => 'login',
-  ]),
-    ['class' => 'btn btn-dark btn-lg'])?></div>
+<h4><?=$this->Flash->render();?></h4>
+
+  <div class="d-grid gap-2 mb-3"><?=$this->Html->link(
+    'Sign in','main/login',
+    ['class' => 'btn btn-dark btn-lg'])?>
+    </div>
+    
 </div>
 <div class="row">
   <div class="col-12">
@@ -29,7 +27,7 @@ use Cake\Routing\Router;
   </thead>
   <tbody>
    <?php
-   
+   if(!empty($users)):
    foreach ($users as $user):
     $statusUser = 'circle';
     if($user->is_active){
@@ -52,6 +50,7 @@ use Cake\Routing\Router;
     </tr>
    <?php 
    endforeach;
+  endif;
    ?>
   </tbody>
 </table>

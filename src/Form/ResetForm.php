@@ -7,12 +7,10 @@ use Cake\Form\Form;
 use Cake\Form\Schema;
 use Cake\Validation\Validator;
 
-use function PHPSTORM_META\type;
-
 /**
- * Auth Form.
+ * Reset Form.
  */
-class AuthForm extends Form
+class ResetForm extends Form
 {
     /**
      * Builds the schema for the modelless form
@@ -22,8 +20,10 @@ class AuthForm extends Form
      */
     protected function _buildSchema(Schema $schema): Schema
     {
-        return $schema->addField('email', ['type' => 'string'])
-        ->addField('password',['type' => 'string']);
+        $schema->addField('email',[
+            'type' => 'string',
+        ]);
+        return $schema;
     }
 
     /**
@@ -34,8 +34,8 @@ class AuthForm extends Form
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator->email('email')
-        ->minLength('password',3);
+        $validator->email('email',false,'email is invalid');
+
         return $validator;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -21,7 +22,14 @@ class UserPolicy
      */
     public function canAdd(IdentityInterface $user, User $resource)
     {
-        return new Result(true);
+        if ($resource->is_admin())
+        
+
+            return new Result(true);
+
+
+        return new Result(false);
+
     }
 
     /**
@@ -33,8 +41,12 @@ class UserPolicy
      */
     public function canEdit(IdentityInterface $user, User $resource)
     {
-        debug($resource);
-        return true;
+        if ($resource->is_admin())
+
+            return new Result(true);
+
+        return new Result(false);
+
     }
 
     /**
@@ -46,6 +58,10 @@ class UserPolicy
      */
     public function canDelete(IdentityInterface $user, User $resource)
     {
+        if ($resource->is_admin()) 
+            return new Result(true);
+
+        return new Result(false);
     }
 
     /**
