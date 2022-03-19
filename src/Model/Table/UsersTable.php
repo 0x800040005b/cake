@@ -144,7 +144,6 @@ class UsersTable extends Table
     }
 
     public function findByPassword(Query $query, array $options){
-
         
         return $query->where(['password = ' => $options['password']]);
         

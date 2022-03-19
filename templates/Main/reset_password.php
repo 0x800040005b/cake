@@ -18,9 +18,8 @@
                 'for' => 'email'
             ]
         ])?>
-       <div class="message-error"> <?= $this->Flash->render('email')?></div>
-       <div class="message-error"> <?= $this->Flash->render('success')?></div>
-       <div class="message-error"> <?= $this->Flash->render('password_change')?></div>
+
+       <h4><?=$this->Flash->render();?></h4>
     </div>
 </div>
 

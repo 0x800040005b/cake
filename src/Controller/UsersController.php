@@ -40,6 +40,9 @@ class UsersController extends AppController
             
         }
         $this->Authorization->skipAuthorization();
+        $this->paginate = [
+            'contain' => ['Roles'],
+        ];
 
         $users = $this->paginate($this->Users);
 

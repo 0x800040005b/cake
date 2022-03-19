@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use App\Form\ResetForm;
+use App\Model\Entity\User;
 use Cake\Event\EventInterface;
 use Cake\Mailer\Mailer;
 use Cake\Routing\Router;
@@ -11,6 +12,48 @@ use Exception;
 
 class MainController extends AppController
 {
+
+    private function generateHash()
+    {
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randStr = '';
+        for ($i = 0; $i < strlen($chars); $i++) {
+            $randStr .= $chars[rand(0, 31)];
+        }
+        return $randStr;
+    }
+
+    private function generateURL($hash)
+    {
+
+        return Router::url([
+            'controller' => 'Main',
+            'action' => 'recovery',
+            '?' => ['r_key' =>  $hash],
+
+        ], true);
+    }
+
+    protected function sendRecoveryURL(User $user){
+
+        $url = $this->generateURL($user->password);
+
+        $mailer = new Mailer('default');
+
+        $mailer->setEmailFormat('html')
+
+                ->setFrom('Admin@mail.com')
+
+                ->setTo($user->email)
+
+                ->setViewVars(['url' => $url, 'email' => $user->email])
+
+                ->viewBuilder()
+
+                    ->setTemplate('reset_password');
+
+        $mailer->deliver();
+    }
 
     public function beforeFilter(EventInterface $event)
     {
@@ -62,8 +105,10 @@ class MainController extends AppController
         // display error if user submitted and authentication failed
         if ($this->request->is('post') && !$result->isValid()) {
 
-            $this->Flash->error(__('Invalid username or password'));
-            return $this->redirect('main/login');
+            $this->Flash->error(__('Invalid username or password'), [
+                'key' => 'data_login',
+                'clear' => true,
+            ]);
         }
     }
 
@@ -85,51 +130,35 @@ class MainController extends AppController
 
         if ($this->request->is('post')) {
 
-            $usersTable = $this->fetchTable('Users');
+            if ($resetForm->execute($this->request->getData())) {
 
-            try {
+                $usersTable = $this->getTableLocator()->get('users');
+
                 $query = $usersTable->find('byEmail', ['email' => $this->request->getData('email')]);
 
-                $user = $query->firstOrFail();
+                $user = $query->first();
 
+                if ($user) {
 
-                $user->password = $this->generateHash();
+                    $user->password = $this->generateHash();
 
-                $usersTable->save($user);
+                    $usersTable->save($user);
 
-                if ($resetForm->execute($this->request->getData())) {
+                    $this->sendRecoveryURL($user);
 
-                    $mailer = new Mailer();
+                    $this->Flash->success('Sent Successfuly', ['clear' => true]);
 
-                    $mailer->setEmailFormat('html')
+                    return $this->redirect('main/resetPassword');
 
-                        ->setTo($this->request->getData('email'))
+                } else {
 
-                        ->setFrom('Admin@test.com')
-                        ->setViewVars(['url' =>  $this->generateURL($user->password),'email' => $this->request->getData('email')])
+                    $this->Flash->error('User Not Found', ['clear' => true]);
 
-                        ->viewBuilder()
-
-                        ->setTemplate('resetPassword');
-
-
-                    $mailer->deliver();
-
-                    $this->Flash->success('sent successfuly', [
-                        'clear' => true,
-                    ]);
-                    return $this->redirect('main/index');
+                    return $this->redirect('main/resetPassword');
                 }
+            } else {
 
-            } catch (Exception $exception) {
-
-                $this->Flash->error('User Not Found', [
-
-                    'key' => 'password_change',
-                    'clear' => true,
-
-                ]);
-                return;
+                $this->Flash->error('invalid email', ['clear' => true]);
             }
         }
     }
@@ -141,7 +170,7 @@ class MainController extends AppController
 
         if ($this->request->is('get')) {
 
-            $this->request->getSession()->write('r_key', $this->request->getQuery('recovery_key'));
+            $this->request->getSession()->write('r_key', $this->request->getQuery('r_key'));
         }
 
         if ($this->request->is('post')) {
@@ -150,63 +179,40 @@ class MainController extends AppController
 
             $r_key = $this->request->getSession()->read('r_key');
 
+            $query = $usersTable->find('byPassword', ['password' => $r_key]);
 
-            try {
-                $query = $usersTable->find('byPassword', ['password' => $r_key]);
+            $user = $query->first();
 
-                $user = $query->firstOrFail();
+            if ($user) {
 
                 $user->password = $this->request->getData('password');
 
                 $this->Flash->error('Password changed successfuly', [
 
-                    'key' => 'password_change',
+                    'key' => 'data_login',
                     'clear' => true,
 
                 ]);
-                
+
                 $usersTable->save($user);
 
-                return $this->redirect('main/login');
-                
 
+            } else {
 
-
-            } catch (Exception $exception) {
                 $this->Flash->error('OOPS password not changed', [
 
-                    'key' => 'password_change',
+                    'key' => 'data_login',
                     'clear' => true,
 
                 ]);
-                
 
-            }finally{
-                $this->request->getSession()->delete('r_key');
-
+               
             }
+            $this->request->getSession()->delete('r_key');
+
+            return $this->redirect('main/login');
 
         }
     }
 
-    private function generateHash()
-    {
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randStr = '';
-        for ($i = 0; $i < strlen($chars); $i++) {
-            $randStr .= $chars[rand(0, 31)];
-        }
-        return $randStr;
-    }
-
-    private function generateURL($hash)
-    {
-
-        return Router::url([
-            'controller' => 'Main',
-            'action' => 'recovery',
-            '?' => ['recovery_key' =>  $hash],
-
-        ], true);
-    }
 }

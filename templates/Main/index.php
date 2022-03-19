@@ -1,11 +1,6 @@
-<?php
 
-
-?>
 
 <div class="row">
-
-<h4><?=$this->Flash->render();?></h4>
 
   <div class="d-grid gap-2 mb-3"><?=$this->Html->link(
     'Sign in','main/login',
