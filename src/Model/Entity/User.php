@@ -77,6 +77,7 @@ class User extends Entity
     public function is_admin(){
         return strcasecmp($this->getRole(), 'Admin') === 0;
     }
+    
     public function is_user(){
         return strcasecmp($this->getRole(), 'User') === 0;
     }
@@ -112,11 +113,13 @@ protected function _setActive($is_active){
     
     return $is_active;
 }
+
 protected function _setEmail($email){
     
     $this->email = $email;
     return $email;
 }
+
 protected function _setPassword($password){
 
     $this->password = password_hash($password,PASSWORD_BCRYPT);
